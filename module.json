@@ -1,0 +1,18 @@
+{
+  "group": "com.meti",
+  "name": "scaffold-java-compile",
+  "version": "0.1",
+  "description": "Compiles java code in the relevant directories.",
+  "content": [
+    {
+      "type": "path",
+      "value": "out\\artifacts\\Scaffold_Java_Compile_jar\\Scaffold-Java-Compile.jar"
+    }
+  ],
+  "dependencies": [
+    {
+      "type": "url",
+      "value": "https://github.com/SirMathhman/Scaffold-Init/releases/download/0.1/module.json"
+    }
+  ],
+  "install": []}
