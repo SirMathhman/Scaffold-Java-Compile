@@ -5,8 +5,8 @@
   "description": "Compiles java code in the relevant directories.",
   "content": [
     {
-      "type": "path",
-      "value": "out\\artifacts\\Scaffold_Java_Compile_jar\\Scaffold-Java-Compile.jar"
+      "type": "url",
+      "value": "https://github.com/SirMathhman/Scaffold-Java-Compile/releases/download/0.1/Scaffold-Java-Compile.jar"
     }
   ],
   "dependencies": [
