@@ -1,5 +1,8 @@
 package com.meti;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,10 +17,12 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public final class Main {
-	public static final Path COMPILE = Paths.get(".", "target", "compile");
-	public static final Path CONFIG = Paths.get(".", "config", "java-compile.json");
-	public static final Path SOURCE = Paths.get(".", "src", "main", "java");
-	public static final Logger logger = Logger.getLogger("Scaffold");
+	private static final Path COMPILE = Paths.get(".", "target", "compile");
+	private static final Path CONFIG = Paths.get(".", "config", "dependencies.json");
+	private static final Path SOURCE = Paths.get(".", "src", "main", "java");
+	private static final Logger logger = Logger.getLogger("Scaffold");
+	private static final ObjectMapper mapper = new ObjectMapper();
+	public static final Path MODULES = Paths.get(".", "modules");
 
 	private Main() {
 	}
@@ -63,6 +68,7 @@ public final class Main {
 	private static void moveClasses() {
 		try {
 			moveClassesExceptionally();
+			logger.log(Level.INFO, "Successfully compiled classes.");
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "Failed to move classes.", e);
 		}
@@ -82,13 +88,34 @@ public final class Main {
 						System.lineSeparator(), outputString));
 			}
 		} else {
-			logger.log(Level.SEVERE, String.format("Failed to execute %s", command));
+			logger.log(Level.SEVERE, String.format("Failed to execute %s.%s%s", command, System.lineSeparator(),
+					errorString));
 		}
 	}
 
 	private static List<String> buildCommand() throws IOException {
 		List<String> command = new ArrayList<>();
 		command.add("javac");
+		command.add("-cp");
+		Collection<Path> classPaths = new ArrayList<>();
+		try (InputStream stream = Files.newInputStream(CONFIG)) {
+			JsonNode tree = mapper.readTree(stream);
+			JsonNode values = tree.get("values");
+			for (JsonNode value : values) {
+				classPaths.add(MODULES.resolve(value.asText()));
+			}
+		}
+		Collection<Path> jars = new ArrayList<>();
+		for (Path classPath : classPaths) {
+			jars.addAll(Files.walk(classPath)
+					.filter(path -> path.toString().endsWith(".jar"))
+					.collect(Collectors.toList()));
+		}
+		String classPathString = jars.stream()
+				.map(Path::toAbsolutePath)
+				.map(Path::toString)
+				.collect(Collectors.joining(";", "\"", "\""));
+		command.add(classPathString);
 		command.addAll(collectJavaPaths());
 		return command;
 	}

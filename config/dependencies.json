@@ -1,0 +1,6 @@
+{
+  "values": [
+    "jackson-core",
+    "jackson-databind"
+  ]
+}
