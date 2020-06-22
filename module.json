@@ -13,6 +13,10 @@
     {
       "type": "url",
       "value": "https://github.com/SirMathhman/Scaffold-JAR/releases/download/0.1/module.json"
+    },
+    {
+      "type": "url",
+      "value": "https://raw.githubusercontent.com/SirMathhman/Scaffold-Modules/master/com/fasterxml/jackson/core/jackson-databind/2.11.0.json"
     }
   ],
   "install": []}

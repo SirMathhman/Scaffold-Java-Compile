@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 public final class Main {
 	public static final Path COMPILE = Paths.get(".", "target", "compile");
+	public static final Path CONFIG = Paths.get(".", "config", "java-compile.json");
 	public static final Path SOURCE = Paths.get(".", "src", "main", "java");
 	public static final Logger logger = Logger.getLogger("Scaffold");
 
@@ -25,7 +26,19 @@ public final class Main {
 		run();
 	}
 
+	private static void prepareConfig() {
+		ensureParent(CONFIG);
+		if(!Files.exists(CONFIG)) {
+			try {
+				Files.createFile(CONFIG);
+			} catch (IOException e) {
+				logger.log(Level.WARNING, "Failed to create config file.");
+			}
+		}
+	}
+
 	private static void run() {
+		prepareConfig();
 		runCompilation();
 		cleanup();
 		moveClasses();
