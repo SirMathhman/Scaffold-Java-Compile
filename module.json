@@ -12,7 +12,7 @@
   "dependencies": [
     {
       "type": "url",
-      "value": "https://github.com/SirMathhman/Scaffold-Init/releases/download/0.1/module.json"
+      "value": "https://github.com/SirMathhman/Scaffold-JAR/releases/download/0.1/module.json"
     }
   ],
   "install": []}
